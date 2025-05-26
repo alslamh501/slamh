@@ -97,7 +97,7 @@
 <body>
   <div class="container">
     <h2>بيانات موظفي قسم الأمن والسلامة والمرافق</h2>
-    <div id="welcomeMessage" style="border: 2px solid #ccc; padding: 10px; border-radius: 10px; font-size: 16px; font-weight: bold; margin: 15px 0; color: #333; display: none;"></div>
+    <div id="welcomeMessage" style="border: 2px solid #ccc; padding: 10px; border-radius: 10px; font-size: 16px; font-weight: bold; margin: 15px auto; color: #333; display: none; max-width: 100%; text-align: center;"></div>
     <div id="step1">
       <input type="text" id="nationalId" placeholder="أدخل رقم السجل المدني" pattern="[\u0600-\u06FFa-zA-Z0-9 ]+">
       <button onclick="fetchData()" style="background-color:#388e3c; color:white; margin-top:10px">استعلام</button>
@@ -214,6 +214,7 @@
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('step1').style.display = 'block';
       document.getElementById('nationalId').value = '';
+      document.getElementById('welcomeMessage').style.display = 'none';
     }
 
     function showToast(message) {
