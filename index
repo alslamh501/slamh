@@ -21,9 +21,18 @@
       margin: auto;
     }
     h2 {
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       color: #1b5e20;
       font-weight: 700;
+    }
+    .fixed-welcome {
+      border: 2px solid #ccc;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      color: #333;
     }
     form {
       text-align: right;
@@ -43,6 +52,7 @@
       border-radius: 10px;
       font-size: 15px;
       font-family: 'Cairo', sans-serif;
+      box-sizing: border-box;
     }
     input[readonly] {
       background-color: #f1f1f1;
@@ -82,30 +92,14 @@
     .toast.show {
       opacity: 1;
     }
-    .welcome {
-      position: fixed;
-      top: 30px;
-      right: 20px;
-      background-color: #43a047;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-      z-index: 1000;
-    }
-    .welcome.show {
-      opacity: 1;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>تحديث بيانات الموظف</h2>
+    <h2>بيانات موظفي قسم الأمن والسلامة والمرافق</h2>
+    <div id="welcomeMessage" style="border: 2px solid #ccc; padding: 10px; border-radius: 10px; font-size: 16px; font-weight: bold; margin: 15px 0; color: #333; display: none;"></div>
     <div id="step1">
-      <input type="text" id="nationalId" placeholder="أدخل رقم السجل المدني">
+      <input type="text" id="nationalId" placeholder="أدخل رقم السجل المدني" pattern="[\u0600-\u06FFa-zA-Z0-9 ]+">
       <button onclick="fetchData()" style="background-color:#388e3c; color:white; margin-top:10px">استعلام</button>
     </div>
     <div id="formSection" style="display:none;">
@@ -126,18 +120,18 @@
         <input type="text" id="sector">
 
         <label for="jobTitle">المسمى الوظيفي الحالي</label>
-<input type="text" id="jobTitle">
+        <input type="text" id="jobTitle">
 
         <label for="department">القسم</label>
-<select id="department" style="width: 100%; padding: 12px; margin-bottom: 18px; border: 1px solid #ccc; border-radius: 10px; font-size: 15px; font-family: 'Cairo', sans-serif;">
-  <option value="">-- اختر القسم --</option>
-  <option value="السلامة المدرسية">السلامة المدرسية</option>
-  <option value="الأجور">الأجور</option>
-  <option value="الأمن المدرسي">الأمن المدرسي</option>
-  <option value="الأزمات">الأزمات</option>
-  <option value="المباني">المباني</option>
-  <option value="المراقبين">المراقبين</option>
-</select>
+        <select id="department" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 15px; font-family: 'Cairo', sans-serif; box-sizing: border-box;">
+          <option value="">-- اختر القسم --</option>
+          <option value="السلامة المدرسية">السلامة المدرسية</option>
+          <option value="الأجور">الأجور</option>
+          <option value="الأمن المدرسي">الأمن المدرسي</option>
+          <option value="الأزمات">الأزمات</option>
+          <option value="المباني">المباني</option>
+          <option value="المراقبين">المراقبين</option>
+        </select>
 
         <label for="qualification">المؤهل التعليمي</label>
         <input type="text" id="qualification">
@@ -158,20 +152,21 @@
   </div>
 
   <div id="toast" class="toast"></div>
-  <div id="welcomeMessage" class="welcome"></div>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwbVZk8j5l4SeCD_dUlfZsZ4hdB32Isgb7beOM391Pjlbu0oYAFyW7anlaHWQncEEoChg/exec';
 
     function fetchData() {
-      
       const nationalId = document.getElementById('nationalId').value.trim();
-      if (!nationalId) return alert("يرجى إدخال رقم السجل المدني");
+      if (!nationalId) return alert("يرجى إدخال رقم السجل المدني أو الاسم");
       fetch(`${scriptURL}?id=${nationalId}`)
         .then(res => res.json())
         .then(data => {
           if (data.status === 'ok') {
-            document.getElementById('step1').style.display = 'none';
+          const welcomeEl = document.getElementById('welcomeMessage');
+          welcomeEl.textContent = `مرحبًا ألف ${data.name}`;
+          welcomeEl.style.display = 'block';
+                                  document.getElementById('step1').style.display = 'none';
             document.getElementById('formSection').style.display = 'block';
             document.getElementById('name').value = data.name;
             document.getElementById('id').value = data.id;
@@ -182,7 +177,7 @@
             document.getElementById('department').value = data.department;
             document.getElementById('qualification').value = data.qualification;
             document.getElementById('major').value = data.major;
-            showWelcome(data.name);
+            document.getElementById('actualTitle').value = data.actualTitle;
           } else {
             showToast('لم يتم العثور على بيانات.');
           }
@@ -226,13 +221,6 @@
       toast.textContent = message;
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    function showWelcome(name) {
-      const welcome = document.getElementById('welcomeMessage');
-      welcome.textContent = `مرحبًا ألف بـ ${name}`;
-      welcome.classList.add('show');
-      setTimeout(() => welcome.classList.remove('show'), 5000);
     }
   </script>
 </body>
