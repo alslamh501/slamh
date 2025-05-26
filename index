@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
@@ -106,22 +107,16 @@
       <form id="employeeForm">
         <label for="name">اسم الموظف</label>
         <input type="text" id="name" readonly>
-
         <label for="id">رقم السجل</label>
         <input type="text" id="id" readonly>
-
         <label for="phone">رقم التواصل</label>
         <input type="text" id="phone">
-
         <label for="grade">المرتبة/ المستوي</label>
         <input type="text" id="grade">
-
         <label for="sector">القطاع</label>
         <input type="text" id="sector">
-
         <label for="jobTitle">المسمى الوظيفي الحالي</label>
         <input type="text" id="jobTitle">
-
         <label for="department">القسم</label>
         <select id="department" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 15px; font-family: 'Cairo', sans-serif; box-sizing: border-box;">
           <option value="">-- اختر القسم --</option>
@@ -132,16 +127,12 @@
           <option value="المباني">المباني</option>
           <option value="المراقبين">المراقبين</option>
         </select>
-
         <label for="qualification">المؤهل التعليمي</label>
         <input type="text" id="qualification">
-
         <label for="major">التخصص</label>
         <input type="text" id="major">
-
         <label for="actualTitle">المسمى الوظيفي الفعلي</label>
         <input type="text" id="actualTitle">
-
         <div style="display:flex; justify-content: space-between; gap: 10px;">
           <button type="button" onclick="submitData()">تأكيد البيانات</button>
           <button type="button" onclick="goBack()">رجوع</button>
@@ -150,12 +141,9 @@
     </div>
     <p id="message"></p>
   </div>
-
   <div id="toast" class="toast"></div>
-
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwbVZk8j5l4SeCD_dUlfZsZ4hdB32Isgb7beOM391Pjlbu0oYAFyW7anlaHWQncEEoChg/exec';
-
     function fetchData() {
       const nationalId = document.getElementById('nationalId').value.trim();
       if (!nationalId) return alert("يرجى إدخال رقم السجل المدني أو الاسم");
@@ -163,10 +151,10 @@
         .then(res => res.json())
         .then(data => {
           if (data.status === 'ok') {
-          const welcomeEl = document.getElementById('welcomeMessage');
-          welcomeEl.textContent = `مرحبًا ألف ${data.name}`;
-          welcomeEl.style.display = 'block';
-                                  document.getElementById('step1').style.display = 'none';
+            const welcomeEl = document.getElementById('welcomeMessage');
+            welcomeEl.textContent = `مرحبًا ألف ${data.name}`;
+            welcomeEl.style.display = 'block';
+            document.getElementById('step1').style.display = 'none';
             document.getElementById('formSection').style.display = 'block';
             document.getElementById('name').value = data.name;
             document.getElementById('id').value = data.id;
@@ -185,7 +173,6 @@
           showToast('حدث خطأ في الاتصال بالسيرفر.');
         });
     }
-
     function submitData() {
       const payload = {
         id: document.getElementById('id').value,
@@ -209,14 +196,12 @@
         showToast('❌ فشل في إرسال البيانات');
       });
     }
-
     function goBack() {
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('step1').style.display = 'block';
       document.getElementById('nationalId').value = '';
       document.getElementById('welcomeMessage').style.display = 'none';
     }
-
     function showToast(message) {
       const toast = document.getElementById('toast');
       toast.textContent = message;
